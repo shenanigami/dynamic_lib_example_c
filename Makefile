@@ -16,6 +16,8 @@ EXTRA_LFLAGS := -Wl,-rpath=$(PWD)
 OUTPUT_BINARY := process_appimage_request
 FINAL_OUTPUT_BINARY := $(addprefix $(BUILD_DIR)/, $(OUTPUT_BINARY))
 FINAL := final
+EXPORT_SCRIPT:=export_lib.sh
+EXPORT_LIB_PATH:=$(shell source $(EXPORT_SCRIPT))
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
@@ -31,7 +33,7 @@ $(LIB_FILE): $(FINAL_LIB_OBJS)
 	gcc -shared -o $@ $(FINAL_LIB_OBJS)
 
 $(FINAL_OUTPUT_BINARY): $(CFILES) $(LIB_FILE) | $(BUILD_DIR)
-	gcc $(CFILES) -L . -l$(LD_LIB) -o $(OUTPUT_BINARY) $(EXTRA_LFLAGS)
+	gcc $(CFILES) -L $(PWD) -l$(LD_LIB) -o $(OUTPUT_BINARY) $(EXTRA_LFLAGS)
 	mv ./$(OUTPUT_BINARY) $(BUILD_DIR)/
 
 $(FINAL): $(FINAL_OUTPUT_BINARY)
