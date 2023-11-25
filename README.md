@@ -16,7 +16,13 @@ I decided to store the generated object files for libjansson.so in a separate fo
 
 
 # Ways of letting your compiler know where your dynamic library is at
-TBD
+There are a number of ways to let your loader know where your share lib is at.
+
+First is the classic, just put it into the known lib directory, e.g. `/usr/lib64`, and then `ldconfig`. The `ldconfig` command creates the required links and updates the cache (for shared libs).
+
+Second way can be seen in this repo's `wl_rpath`  branch's version of Makefile. The rule for `$(OUTPUT_BINARY)` contains `$(EXTRA_LFLAGS)` variable that is defined in terms of `-Wl,-rpath` flags. These flags supply the runtime library path.
+
+The third way, in this repo's `ld_library_path` branch's Makefile, modifies the LD_LIBRARY_PATH environmental variable and exports it.
 
 # Sources
 - https://cylab.be/blog/234/creating-a-dynamic-library-in-c
